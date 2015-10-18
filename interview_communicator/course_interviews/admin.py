@@ -6,17 +6,17 @@ from .models import Student, Teacher, FreeForInterview
 
 
 class StudentAdmin(admin.ModelAdmin):
-        list_display = [
-            'name',
-            'email',
-            'skype',
-            'phone_number',
-            'applied_course',
-            'has_been_interviewed',
-            'teacher_comment'
-        ]
-        list_filter = ['applied_course', 'has_been_interviewed']
-        search_fields = ['name', 'email', 'skype']
+    list_display = [
+        'name',
+        'email',
+        'skype',
+        'phone_number',
+        'applied_course',
+        'has_been_interviewed',
+        'teacher_comment'
+    ]
+    list_filter = ['applied_course', 'has_been_interviewed']
+    search_fields = ['name', 'email', 'skype']
 
 admin.site.register(Student, StudentAdmin)
 
@@ -24,16 +24,26 @@ admin.site.register(Student, StudentAdmin)
 class FreeForInterviewAdmin(admin.ModelAdmin):
     model = FreeForInterview
 
-    # def save_model(self, request, obj, form, change):
-    #     if not change:
-    #         obj.user = request.user
-    #     obj.save()
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.teacher = request.user.teacher
+        obj.save()
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         if request.user.is_superuser:
             return queryset
         return queryset.filter(teacher=request.user.teacher)
+
+    readonly_fields = ('teacher', )
+    list_display = [
+        "teacher",
+        "date",
+        "start_time",
+        "end_time"
+    ]
+    list_filter = ["date", "start_time", "end_time"]
+    search_fields = ["teacher"]
 
 admin.site.register(FreeForInterview, FreeForInterviewAdmin)
 
