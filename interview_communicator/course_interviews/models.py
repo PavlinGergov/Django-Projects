@@ -17,6 +17,9 @@ class Student(models.Model):
     teacher_comment = models.TextField(null=True, blank=True)
     has_interview_date = models.BooleanField(default=False)
     has_been_interviewed = models.BooleanField(default=False)
+    CHOICES = [(i, i) for i in range(11)]
+    # code_skills_rating = models.IntegerField(max_length=10, choices=CHOICES)
+    # is_accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -38,7 +41,3 @@ class FreeForInterview(models.Model):
 
     def __str__(self):
         return str(self.date) + " - from " + str(self.start_time) + " to " + str(self.end_time)
-
-    # date = datetime
-    # start_time = time
-    # end_time = time

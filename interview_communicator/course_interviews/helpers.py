@@ -25,6 +25,8 @@ class Applicant:
         return self.email.split(" ")[1][13:-1].replace("&#64;", "@")
 
     def get_skype(self):
+        if self.skype.startswith("<a href"):
+            return self.skype.split(" ")[1][13:-1].replace("&#64;", "@")
         return self.skype
 
     def get_phone_number(self):
@@ -36,13 +38,28 @@ class Applicant:
         return self.applied_course
 
     def get_first_task(self):
-        return self.first_task.split(" ")[1][6:-1]
+        task = ""
+        try:
+            task = self.first_task.split(" ")[1][6:-1]
+        except:
+            pass
+        return task
 
     def get_second_task(self):
-        return self.second_task.split(" ")[1][6:-1]
+        task = ""
+        try:
+            task = self.second_task.split(" ")[1][6:-1]
+        except:
+            pass
+        return task
 
     def get_third_task(self):
-        return self.third_task.split(" ")[1][6:-1]
+        task = ""
+        try:
+            task = self.third_task.split(" ")[1][6:-1]
+        except:
+            pass
+        return task
 
     def get_studies_at(self):
         return self.studies_at
@@ -62,3 +79,10 @@ class GetApplicants:
         url = self.address + self.form_name + "/applications?api_key=" + self.api_key
         form_data = requests.get(url).json()["data"]
         return form_data
+
+
+def get_applications(address, form_name, api_key, count, page):
+    url = address + form_name + "/applications?api_key=" \
+        + api_key + "&page=" + str(page) + "&count=" + str(count)
+    applications = requests.get(url).json()
+    return applications
