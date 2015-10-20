@@ -8,14 +8,25 @@ from .models import Student, Teacher, FreeForInterview
 class StudentAdmin(admin.ModelAdmin):
     list_display = [
         'name',
-        'email',
-        'skype',
-        'phone_number',
+        # 'email',
+        # 'skype',
+        # 'phone_number',
         'applied_course',
+        'code_skills_rating',
+        'code_design_rating',
+        'fit_attitude_rating',
+        'has_interview_date',
         'has_been_interviewed',
-        'teacher_comment'
+        'is_accepted'
     ]
-    list_filter = ['applied_course', 'has_been_interviewed']
+    list_filter = [
+        'applied_course',
+        'code_skills_rating',
+        'code_design_rating',
+        'fit_attitude_rating',
+        'has_been_interviewed',
+        'is_accepted'
+    ]
     search_fields = ['name', 'email', 'skype']
 
 admin.site.register(Student, StudentAdmin)

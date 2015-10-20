@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Student
-from helpers import get_applications
+from .helpers import get_applications
 
 
 def index(request):

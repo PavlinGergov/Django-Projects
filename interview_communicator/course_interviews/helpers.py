@@ -68,19 +68,6 @@ class Applicant:
         return self.works_at
 
 
-class GetApplicants:
-
-    def __init__(self, address, form_name, api_key):
-        self.address = address
-        self.form_name = form_name
-        self.api_key = api_key
-
-    def get_all_applicants(self):
-        url = self.address + self.form_name + "/applications?api_key=" + self.api_key
-        form_data = requests.get(url).json()["data"]
-        return form_data
-
-
 def get_applications(address, form_name, api_key, count, page):
     url = address + form_name + "/applications?api_key=" \
         + api_key + "&page=" + str(page) + "&count=" + str(count)
