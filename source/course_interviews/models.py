@@ -55,18 +55,20 @@ class Teacher(models.Model):
         return self.user.get_full_name()
 
 
-class FreeForInterview(models.Model):
+class TeacherTimeSlot(models.Model):
     teacher = models.ForeignKey(Teacher)
     date = models.DateField(blank=False, null=True)
     start_time = models.TimeField(blank=False, null=True)
     end_time = models.TimeField(blank=False, null=True)
 
+    def has_generated_slots(self):
+        return self.interviewslot_set.exists()
+
     def __str__(self):
         return str(self.date) + " - from " + str(self.start_time) + " to " + str(self.end_time)
 
 
-class InterviewSlots(models.Model):
-    teacher = models.ForeignKey(Teacher)
-    students = models.ForeignKey(Student)
-    date = models.DateField(blank=False, null=True)
+class InterviewSlot(models.Model):
+    teacher_time_slot = models.ForeignKey(TeacherTimeSlot)
+    student = models.ForeignKey(Student, null=True)
     start_time = models.TimeField(blank=False, null=True)

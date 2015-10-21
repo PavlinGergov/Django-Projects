@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Student, Teacher, FreeForInterview
+from .models import Student, Teacher, TeacherTimeSlot, InterviewSlot
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -32,8 +32,8 @@ class StudentAdmin(admin.ModelAdmin):
 admin.site.register(Student, StudentAdmin)
 
 
-class FreeForInterviewAdmin(admin.ModelAdmin):
-    model = FreeForInterview
+class TeacherTimeSlotAdmin(admin.ModelAdmin):
+    model = TeacherTimeSlot
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []
@@ -42,7 +42,7 @@ class FreeForInterviewAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
-        if not change:
+        if not change and not request.user.is_superuser:
             obj.teacher = request.user.teacher
         obj.save()
 
@@ -52,7 +52,9 @@ class FreeForInterviewAdmin(admin.ModelAdmin):
             return queryset
         return queryset.filter(teacher=request.user.teacher)
 
+    # Excluded this field for teachers. The admin can add TeacherTimeSlots for all teachers
     # readonly_fields = ('teacher', )
+
     list_display = [
         "teacher",
         "date",
@@ -62,7 +64,7 @@ class FreeForInterviewAdmin(admin.ModelAdmin):
     list_filter = ["date", "start_time", "end_time"]
     search_fields = ["teacher"]
 
-admin.site.register(FreeForInterview, FreeForInterviewAdmin)
+admin.site.register(TeacherTimeSlot, TeacherTimeSlotAdmin)
 
 
 class TeacherInline(admin.StackedInline):
@@ -75,3 +77,27 @@ class UserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+
+
+class InterviewSlotAdmin(admin.ModelAdmin):
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(teacher_time_slot=request.user.teacher.teachertimeslot_set.all())
+
+    def teacher(self, obj):
+        return obj.teacher_time_slot.teacher
+
+    def date(self, obj):
+        return obj.teacher_time_slot.date
+
+    list_display = [
+        'teacher',
+        'date',
+        'student',
+        'start_time'
+    ]
+
+admin.site.register(InterviewSlot, InterviewSlotAdmin)

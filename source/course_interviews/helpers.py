@@ -1,5 +1,6 @@
-from .models import Student, FreeForInterview
+from .models import TeacherTimeSlot, InterviewSlot
 import requests
+from datetime import datetime, timedelta
 
 
 class Applicant:
@@ -76,6 +77,43 @@ def get_applications(address, form_name, api_key, count, page):
     return applications
 
 
-def generate_interviews():
-    students = Student.objects.all()
-    
+def calculate_diff_in_time(start_time, end_time):
+    start_delta = timedelta(
+        hours=start_time.hour, minutes=start_time.minute, seconds=start_time.second)
+    end_delta = timedelta(
+        hours=end_time.hour, minutes=end_time.minute, seconds=end_time.second)
+    return (end_delta - start_delta).seconds / 60
+
+
+def generate_interview_slots(interview_time_length, break_time):
+    teacher_time_slots = TeacherTimeSlot.objects.all().order_by('date')
+
+    for slot in teacher_time_slots:
+        # Check if slots are already generated
+        if slot.has_generated_slots():
+            continue
+
+        free_time = calculate_diff_in_time(slot.start_time, slot.end_time)
+        interview_start_time = slot.start_time
+
+        while free_time >= interview_time_length:
+            interview_slot = InterviewSlot(
+                teacher_time_slot=slot,
+                start_time=interview_start_time)
+            interview_slot.save()
+
+            # Decrease the free time and change the starting time of the next interview
+            free_time -= (interview_time_length + break_time)
+            next_interview_date_and_time = datetime.combine(
+                    slot.date, interview_start_time) + timedelta(
+                    minutes=(interview_time_length + break_time))
+            interview_start_time = next_interview_date_and_time.time()
+
+
+# def generate_interviews(interview_length):
+#     students = Student.objects.all()
+#     free_for_interviews = FreeForInterview.objects.all().order_by('date')
+#     for student in students:
+
+#     for x in free_for_interviews:
+#         print(calculate_diff_in_time(x.start_time, x.end_time))
