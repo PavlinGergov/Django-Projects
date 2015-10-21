@@ -93,3 +93,8 @@ SUIT_CONFIG = {
     # misc
     'LIST_PER_PAGE': 100
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    exit("local_settings.py not found!")
