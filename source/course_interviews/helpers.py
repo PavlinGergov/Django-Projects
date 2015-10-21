@@ -1,3 +1,4 @@
+from .models import Student, FreeForInterview
 import requests
 
 
@@ -73,3 +74,8 @@ def get_applications(address, form_name, api_key, count, page):
         + api_key + "&page=" + str(page) + "&count=" + str(count)
     applications = requests.get(url).json()
     return applications
+
+
+def generate_interviews():
+    students = Student.objects.all()
+    

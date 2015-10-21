@@ -63,3 +63,10 @@ class FreeForInterview(models.Model):
 
     def __str__(self):
         return str(self.date) + " - from " + str(self.start_time) + " to " + str(self.end_time)
+
+
+class InterviewSlots(models.Model):
+    teacher = models.ForeignKey(Teacher)
+    students = models.ForeignKey(Student)
+    date = models.DateField(blank=False, null=True)
+    start_time = models.TimeField(blank=False, null=True)

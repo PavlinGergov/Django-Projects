@@ -35,6 +35,12 @@ admin.site.register(Student, StudentAdmin)
 class FreeForInterviewAdmin(admin.ModelAdmin):
     model = FreeForInterview
 
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = []
+        if not request.user.is_superuser:
+            self.exclude = ['teacher']
+        return super().get_form(request, obj, **kwargs)
+
     def save_model(self, request, obj, form, change):
         if not change:
             obj.teacher = request.user.teacher
@@ -46,7 +52,7 @@ class FreeForInterviewAdmin(admin.ModelAdmin):
             return queryset
         return queryset.filter(teacher=request.user.teacher)
 
-    readonly_fields = ('teacher', )
+    # readonly_fields = ('teacher', )
     list_display = [
         "teacher",
         "date",
