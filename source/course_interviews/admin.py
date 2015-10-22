@@ -95,8 +95,8 @@ class InterviewSlotAdmin(admin.ModelAdmin):
 
     list_display = [
         'teacher',
-        'date',
         'student',
+        'date',
         'start_time'
     ]
 

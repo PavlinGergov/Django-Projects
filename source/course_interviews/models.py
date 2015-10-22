@@ -15,6 +15,7 @@ class Student(models.Model):
     third_task = models.URLField(null=True, blank=True)
     studies_at = models.CharField(blank=True, null=True, max_length=110)
     works_at = models.CharField(null=True, blank=True, max_length=110)
+
     # possible_rating is number between 1 and 10 to be selected in the integer field
     possible_ratings = [(i, i) for i in range(11)]
     code_skills_rating = models.IntegerField(
@@ -47,10 +48,15 @@ class Student(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User)
+    interviewing_for = models.CharField(
+        default=False,
+        max_length=110,
+        choices=[(0, 'Programming 101 with Java'), (0, 'Programming 101 with C#')],
+        help_text='Курсът за който интервюиращият ще прави интервюта')
     skype = models.CharField(
         default=None,
         max_length=50,
-        help_text='Enter the skype of the theacher!')
+        help_text='Enter the skype of the teacher!')
 
     def __str__(self):
         return self.user.get_full_name()
