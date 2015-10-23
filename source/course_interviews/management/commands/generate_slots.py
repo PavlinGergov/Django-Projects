@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
-from course_interviews.helpers import GenerateInterviewSlots
+from course_interviews.helpers.generate_interview_slots import GenerateInterviewSlots
 
 
 class Command(BaseCommand):
-    help = 'Make a request to f6s and add applicants with finalized forms'
+    help = 'Generate interview slots using the free time of the interviewers'
 
     def handle(self, **options):
         interview_length = 30

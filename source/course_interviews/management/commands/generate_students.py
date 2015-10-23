@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from course_interviews.helpers import GenerateStudents
+from course_interviews.helpers.generate_students import GenerateStudents
 
 
 class Command(BaseCommand):
@@ -17,4 +17,5 @@ class Command(BaseCommand):
 
         students_generator.generate_students()
         errors = students_generator.get_errors()
+
         print(str(errors) + ' errors occured')

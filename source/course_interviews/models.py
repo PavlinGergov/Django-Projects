@@ -57,7 +57,7 @@ class Teacher(models.Model):
         return self.user.get_full_name()
 
 
-class InterviewersFreeTime(models.Model):
+class InterviewerFreeTime(models.Model):
     teacher = models.ForeignKey(Teacher)
     date = models.DateField(blank=False, null=True)
     start_time = models.TimeField(blank=False, null=True)
@@ -71,6 +71,6 @@ class InterviewersFreeTime(models.Model):
 
 
 class InterviewSlot(models.Model):
-    teacher_time_slot = models.ForeignKey(InterviewersFreeTime)
+    teacher_time_slot = models.ForeignKey(InterviewerFreeTime)
     student = models.ForeignKey(Student, null=True)
     start_time = models.TimeField(blank=False, null=True)

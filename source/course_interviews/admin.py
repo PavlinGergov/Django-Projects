@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Student, Teacher, InterviewersFreeTime, InterviewSlot
+from .models import Student, Teacher, InterviewerFreeTime, InterviewSlot
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -47,6 +47,7 @@ class StudentAdmin(admin.ModelAdmin):
         'code_skills_rating',
         'code_design_rating',
         'fit_attitude_rating',
+        'has_confirmed_interview',
         'has_been_interviewed',
         'is_accepted'
     ]
@@ -55,8 +56,8 @@ class StudentAdmin(admin.ModelAdmin):
 admin.site.register(Student, StudentAdmin)
 
 
-class InterviewersFreeTimeAdmin(admin.ModelAdmin):
-    model = InterviewersFreeTime
+class InterviewerFreeTimeAdmin(admin.ModelAdmin):
+    model = InterviewerFreeTime
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []
@@ -84,7 +85,7 @@ class InterviewersFreeTimeAdmin(admin.ModelAdmin):
     list_filter = ["date", "start_time", "end_time"]
     search_fields = ["teacher"]
 
-admin.site.register(InterviewersFreeTime, InterviewersFreeTimeAdmin)
+admin.site.register(InterviewerFreeTime, InterviewerFreeTimeAdmin)
 
 
 class TeacherInline(admin.StackedInline):
@@ -111,7 +112,7 @@ class InterviewSlotAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return queryset
         return queryset.filter(
-            teacher_time_slot=request.user.teacher.interviewersfreetime_set.all())
+            teacher_time_slot=request.user.teacher.interviewerfreetime_set.all())
 
     def get_date(self, obj):
         return obj.teacher_time_slot.date

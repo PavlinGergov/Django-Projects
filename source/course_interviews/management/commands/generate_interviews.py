@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
-from course_interviews.helpers import GenerateInterviews
+from course_interviews.helpers.generate_interviews import GenerateInterviews
 
 
 class Command(BaseCommand):
-    help = 'Make a request to f6s and add applicants with finalized forms'
+    help = 'Generate interviews using the free interview slots'
 
     def handle(self, **options):
         interview_generator = GenerateInterviews()

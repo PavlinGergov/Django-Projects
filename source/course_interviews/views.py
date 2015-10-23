@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .helpers import CourseStudents
+from .helpers.course_students import CourseStudents
 
 
 def index(request):
