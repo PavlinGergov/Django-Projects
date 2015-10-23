@@ -23,6 +23,6 @@ def get_students(request, course):
         f6s_address, f6s_application_name, f6s_api_key, f6s_page_count, f6s_page, course)
 
     course_students_generator.generate_students_for_course()
-    json = course_students_generator.get_json
+    json = course_students_generator.get_json()
 
     return JsonResponse(json)

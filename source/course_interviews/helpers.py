@@ -108,7 +108,7 @@ class CourseStudents(GetStudents):
                 break
 
             # Break loop if all students are added
-            self.f6s_page += 1
+            self.page += 1
             for student in applications["data"]:
                 if student["questions"][6]["field_response"] and \
                         student["questions"][6]["field_response"][0] == self.course:
