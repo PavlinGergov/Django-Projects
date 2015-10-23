@@ -6,16 +6,39 @@ from .models import Student, Teacher, InterviewersFreeTime, InterviewSlot
 
 
 class StudentAdmin(admin.ModelAdmin):
+
+    def get_first_task(self, obj):
+        return u"<a href='{0}' target='_blank'>link</a>".format(obj.first_task)
+    get_first_task.allow_tags = True
+    get_first_task.short_description = "First task"
+    get_first_task.admin_order_field = 'first_task'
+
+    def get_second_task(self, obj):
+        return u"<a href='{0}' target='_blank'>link</a>".format(obj.second_task)
+    get_second_task.allow_tags = True
+    get_second_task.short_description = "Second task"
+    get_second_task.admin_order_field = 'second_task'
+
+    def get_third_task(self, obj):
+        return u"<a href='{0}' target='_blank'>link</a>".format(obj.third_task)
+    get_third_task.allow_tags = True
+    get_third_task.short_description = "Third task"
+    get_third_task.admin_order_field = 'third_task'
+
     list_display = [
         'name',
-        # 'email',
-        # 'skype',
-        # 'phone_number',
+        'email',
+        'skype',
+        'phone_number',
         'applied_course',
+        'get_first_task',
+        'get_second_task',
+        'get_third_task',
         'code_skills_rating',
         'code_design_rating',
         'fit_attitude_rating',
         'has_interview_date',
+        'has_confirmed_interview',
         'has_been_interviewed',
         'is_accepted'
     ]
@@ -77,6 +100,11 @@ admin.site.register(User, UserAdmin)
 
 
 class InterviewSlotAdmin(admin.ModelAdmin):
+
+    def has_change_permission(self, request, obj=None):
+        if obj and request.POST and not request.user.is_superuser:
+            return False
+        return super().has_change_permission(request, obj)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
