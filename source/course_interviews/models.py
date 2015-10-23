@@ -51,7 +51,10 @@ class Teacher(models.Model):
     interviewing_for = models.CharField(
         default=False,
         max_length=110,
-        choices=[(0, 'Programming 101 with Java'), (0, 'Programming 101 with C#')],
+        choices=[
+            ('Programming 101 with Java', 'Programming 101 with Java'),
+            ('Programming 101 with C#', 'Programming 101 with C#'),
+            ('Both', 'Both')],
         help_text='Курсът за който интервюиращият ще прави интервюта')
     skype = models.CharField(
         default=None,
@@ -62,7 +65,7 @@ class Teacher(models.Model):
         return self.user.get_full_name()
 
 
-class TeacherTimeSlot(models.Model):
+class InterviewersFreeTime(models.Model):
     teacher = models.ForeignKey(Teacher)
     date = models.DateField(blank=False, null=True)
     start_time = models.TimeField(blank=False, null=True)
@@ -76,6 +79,6 @@ class TeacherTimeSlot(models.Model):
 
 
 class InterviewSlot(models.Model):
-    teacher_time_slot = models.ForeignKey(TeacherTimeSlot)
+    teacher_time_slot = models.ForeignKey(InterviewersFreeTime)
     student = models.ForeignKey(Student, null=True)
     start_time = models.TimeField(blank=False, null=True)

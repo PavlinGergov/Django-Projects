@@ -36,9 +36,10 @@ def get_students(request, course):
             break
         f6s_page += 1
         for student in applications["data"]:
-            json["max"]["value"] += 1
-            if (student["status"] == "Finalized") and (
-                    student["questions"][6]["field_response"][0] == course):
+            if student["questions"][6]["field_response"] and \
+                    student["questions"][6]["field_response"][0] == course:
+                json["max"]["value"] += 1
+            if student["status"] == "Finalized":
                 json["item"] += 1
 
     return JsonResponse(json)

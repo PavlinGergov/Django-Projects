@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Student, Teacher, TeacherTimeSlot, InterviewSlot
+from .models import Student, Teacher, InterviewersFreeTime, InterviewSlot
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -32,8 +32,8 @@ class StudentAdmin(admin.ModelAdmin):
 admin.site.register(Student, StudentAdmin)
 
 
-class TeacherTimeSlotAdmin(admin.ModelAdmin):
-    model = TeacherTimeSlot
+class InterviewersFreeTimeAdmin(admin.ModelAdmin):
+    model = InterviewersFreeTime
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []
@@ -52,9 +52,6 @@ class TeacherTimeSlotAdmin(admin.ModelAdmin):
             return queryset
         return queryset.filter(teacher=request.user.teacher)
 
-    # Excluded this field for teachers. The admin can add TeacherTimeSlots for all teachers
-    # readonly_fields = ('teacher', )
-
     list_display = [
         "teacher",
         "date",
@@ -64,7 +61,7 @@ class TeacherTimeSlotAdmin(admin.ModelAdmin):
     list_filter = ["date", "start_time", "end_time"]
     search_fields = ["teacher"]
 
-admin.site.register(TeacherTimeSlot, TeacherTimeSlotAdmin)
+admin.site.register(InterviewersFreeTime, InterviewersFreeTimeAdmin)
 
 
 class TeacherInline(admin.StackedInline):
@@ -85,19 +82,35 @@ class InterviewSlotAdmin(admin.ModelAdmin):
         queryset = super().get_queryset(request)
         if request.user.is_superuser:
             return queryset
-        return queryset.filter(teacher_time_slot=request.user.teacher.teachertimeslot_set.all())
+        return queryset.filter(
+            teacher_time_slot=request.user.teacher.interviewersfreetime_set.all())
 
-    def teacher(self, obj):
-        return obj.teacher_time_slot.teacher
-
-    def date(self, obj):
+    def get_date(self, obj):
         return obj.teacher_time_slot.date
+    get_date.short_description = 'Date'
+    get_date.admin_order_field = 'teacher_time_slot__date'
+
+    def get_start_time(self, obj):
+        return obj.start_time
+    get_start_time.short_description = "Starting"
+    get_start_time.admin_order_field = 'start_time'
+
+    def get_student(self, obj):
+        if obj.student_id and obj.student.name:
+            return u"<a href='../student/{0}/'>{1}</a>".format(obj.student_id, obj.student.name)
+        return
+    get_student.short_description = "Student"
+    get_student.allow_tags = True
+
+    def get_teacher(self, obj):
+        return obj.teacher_time_slot.teacher
+    get_teacher.short_description = "Teacher"
 
     list_display = [
-        'teacher',
-        'student',
-        'date',
-        'start_time'
+        'get_date',
+        'get_start_time',
+        'get_student',
+        'get_teacher',
     ]
 
 admin.site.register(InterviewSlot, InterviewSlotAdmin)

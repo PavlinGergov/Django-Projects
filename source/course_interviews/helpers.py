@@ -1,4 +1,4 @@
-from .models import Student, TeacherTimeSlot, InterviewSlot
+from .models import Student, InterviewersFreeTime, InterviewSlot
 import requests
 from datetime import datetime, timedelta
 
@@ -86,7 +86,7 @@ def calculate_diff_in_time(start_time, end_time):
 
 
 def generate_interview_slots(interview_time_length, break_time):
-    teacher_time_slots = TeacherTimeSlot.objects.all().order_by('date')
+    teacher_time_slots = InterviewersFreeTime.objects.all().order_by('date')
 
     for slot in teacher_time_slots:
         # Check if slots are already generated
@@ -116,9 +116,12 @@ def generate_interviews():
     for slot in slots:
         if len(students) != 0:
             student = students.pop(0)
-            slot.student = student
-            student.has_interview_date = True
-            slot.save()
-            student.save()
+            if not student.has_interview_date:
+                slot.student = student
+                student.has_interview_date = True
+                slot.save()
+                student.save()
         else:
             break
+
+    print(str(len(students)) + ' students do not have interview date.')

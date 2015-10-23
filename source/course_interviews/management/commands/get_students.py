@@ -13,6 +13,7 @@ class Command(BaseCommand):
         f6s_page_count = 100
         f6s_page = 1
 
+        errors = 0
         while (True):
             applications = get_applications(
                 f6s_address, f6s_application_name, f6s_api_key, f6s_page_count, f6s_page)
@@ -48,6 +49,8 @@ class Command(BaseCommand):
                     )
                     try:
                         student.save()
-                    except:
+                    except Exception:
+                        errors += 1
                         # TODO: handle?
                         pass
+        print(str(errors) + ' errors occured.')
