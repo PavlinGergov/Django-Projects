@@ -48,14 +48,6 @@ class Student(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User)
-    interviewing_for = models.CharField(
-        default=False,
-        max_length=110,
-        choices=[
-            ('Programming 101 with Java', 'Programming 101 with Java'),
-            ('Programming 101 with C#', 'Programming 101 with C#'),
-            ('Both', 'Both')],
-        help_text='Курсът за който интервюиращият ще прави интервюта')
     skype = models.CharField(
         default=None,
         max_length=50,
