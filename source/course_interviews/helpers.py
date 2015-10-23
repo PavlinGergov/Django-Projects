@@ -113,8 +113,8 @@ class CourseStudents(GetStudents):
                 if student["questions"][6]["field_response"] and \
                         student["questions"][6]["field_response"][0] == self.course:
                     self.__json["max"]["value"] += 1
-                if student["status"] == "Finalized":
-                    self.__json["item"] += 1
+                    if student["status"] == "Finalized":
+                        self.__json["item"] += 1
 
     def get_json(self):
         return self.__json
