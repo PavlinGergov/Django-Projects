@@ -16,6 +16,11 @@ class Command(BaseCommand):
             f6s_address, f6s_application_name, f6s_api_key, f6s_page_count, f6s_page)
 
         students_generator.generate_students()
-        errors = students_generator.get_errors()
+        generated_students = students_generator.get_generated_students()
+        finalized_students = students_generator.get_students_with_finalized_applications()
+        students_in_base = students_generator.get_students_in_base()
 
-        print(str(errors) + ' errors occured')
+        print(str(generated_students) + ' students were generated')
+        print('There are ' + str(
+            finalized_students) + ' students with finalized applications and ' + str(
+            students_in_base) + ' in the base')

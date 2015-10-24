@@ -7,10 +7,14 @@ class GenerateStudents(GetStudents):
 
     def __init__(self, address, form_name, api_key, count, page):
         super().__init__(address, form_name, api_key, count, page)
+        self.__students_with_finalized_applications = 0
         self.__errors = 0
 
     def __inc_errors(self):
         self.__errors += 1
+
+    def __inc_students_with_finalized_applications(self):
+        self.__students_with_finalized_applications += 1
 
     def __add_applicant(self, person):
         if person["status"] == "Finalized":
@@ -39,6 +43,7 @@ class GenerateStudents(GetStudents):
                 phone_number=applicant.get_phone_number(),
             )
             try:
+                self.__inc_students_with_finalized_applications()
                 student.save()
             except Exception:
                 self.__inc_errors()
@@ -59,3 +64,12 @@ class GenerateStudents(GetStudents):
 
     def get_errors(self):
         return self.__errors
+
+    def get_generated_students(self):
+        return self.__students_with_finalized_applications - self.__errors
+
+    def get_students_with_finalized_applications(self):
+        return self.__students_with_finalized_applications
+
+    def get_students_in_base(self):
+        return len(Student.objects.all())
