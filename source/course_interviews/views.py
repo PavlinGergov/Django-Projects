@@ -12,6 +12,7 @@ def get_students(request, course):
         course = "Programming 101 with C#"
     elif course == "Java":
         course = "Programming 101 with Java"
+
     f6s_address = "https://api.f6s.com/"
     f6s_application_name = "hackbulgaria-courses-fall2015"
     f6s_api_key = "g3WHBM4UYv"

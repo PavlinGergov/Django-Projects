@@ -23,7 +23,7 @@ class GenerateInterviewSlots:
         teacher_time_slots = InterviewerFreeTime.objects.all().order_by('date')
 
         for slot in teacher_time_slots:
-            # Check if slots are already generated
+            # Check if slot is already generated
             if slot.has_generated_slots():
                 continue
 

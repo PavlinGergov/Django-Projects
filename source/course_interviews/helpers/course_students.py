@@ -19,11 +19,12 @@ class CourseStudents(GetStudents):
     def generate_students_for_course(self):
         while (True):
             applications = self.get_student_applications()
-            if applications["items_count"] == 0:
-                break
 
             # Break loop if all students are added
+            if applications["items_count"] == 0:
+                break
             self.page += 1
+
             for student in applications["data"]:
                 if student["questions"][6]["field_response"] and \
                         student["questions"][6]["field_response"][0] == self.course:
