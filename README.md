@@ -1,1 +1,3 @@
-# Django-Projects
+# Django Project
+
+* Application for interviews
