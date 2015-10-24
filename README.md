@@ -1,5 +1,5 @@
 # Application for interviews
 
-  # Technologies:
+  Technologies:
 * Python
 * Django
