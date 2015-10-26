@@ -20,7 +20,8 @@ class Applicant:
 
     def get_email(self):
         try:
-            self.email = self.email.split(" ")[1][13:-1].replace("&#64;", "@")
+            # F6S Where is your validation?!?
+            self.email = self.email.split(" ")[1][13:-1].replace("&#64;", "@").replace(",", ".")
         except:
             pass
         return self.email

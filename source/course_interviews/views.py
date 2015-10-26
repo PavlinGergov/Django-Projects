@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .helpers.course_students import CourseStudents
+from .helpers.get_students_emails import GetStudentsEmails
 
 
 def index(request):
@@ -24,5 +25,23 @@ def get_students(request, course):
 
     course_students_generator.generate_students_for_course()
     json = course_students_generator.get_json()
+
+    return JsonResponse(json)
+
+
+def get_emails(request):
+    courses = ["Programming 101 with C#", "Programming 101 with Java"]
+
+    f6s_address = "https://api.f6s.com/"
+    f6s_application_name = "hackbulgaria-courses-fall2015"
+    f6s_api_key = "g3WHBM4UYv"
+    f6s_page_count = 100
+    f6s_page = 1
+
+    get_students_emails_generator = GetStudentsEmails(
+        f6s_address, f6s_application_name, f6s_api_key, f6s_page_count, f6s_page, courses)
+
+    get_students_emails_generator.generate_students_emails()
+    json = get_students_emails_generator.get_json()
 
     return JsonResponse(json)
