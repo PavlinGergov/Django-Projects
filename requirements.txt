@@ -1,6 +1,8 @@
 Django==1.8.5
+django-extensions==1.5.7
 django-phonenumber-field==0.7.2
 django-suit==0.2.15
 phonenumbers==7.1.0
 requests==2.8.1
+six==1.10.0
 wheel==0.24.0
