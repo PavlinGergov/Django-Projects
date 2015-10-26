@@ -2,6 +2,8 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
+from django_extensions.db.fields import UUIDField
+import uuid
 
 
 class Student(models.Model):
@@ -41,6 +43,7 @@ class Student(models.Model):
     has_confirmed_interview = models.BooleanField(default=False)
     has_been_interviewed = models.BooleanField(default=False)
     is_accepted = models.BooleanField(default=False)
+    uuid = UUIDField(version=4, unique=True, default=uuid.uuid4)
 
     def __str__(self):
         return self.name

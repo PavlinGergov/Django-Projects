@@ -52,6 +52,7 @@ class StudentAdmin(admin.ModelAdmin):
         'is_accepted'
     ]
     search_fields = ['name', 'email', 'skype']
+    readonly_fields = ('uuid',)
 
 admin.site.register(Student, StudentAdmin)
 
