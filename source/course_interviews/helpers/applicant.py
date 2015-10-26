@@ -21,9 +21,11 @@ class Applicant:
     def get_email(self):
         try:
             # F6S Where is your validation?!?
-            self.email = self.email.split(" ")[1][13:-1].replace("&#64;", "@").replace(",", ".")
+            self.email = self.email.split(" ")[1][13:-1].replace("&#64;", "@")
         except:
             pass
+        # Handle invalid email address...
+        self.email = self.email.replace(",", ".")
         return self.email
 
     def get_skype(self):
@@ -32,8 +34,12 @@ class Applicant:
         return self.skype
 
     def get_phone_number(self):
-        if self.phone_number.startswith('0'):
-            self.phone_number = "+359" + self.phone_number[1:]
+        if self.phone_number.startswith('+359'):
+            return self.phone_number
+        else:
+            self.phone_number = "+359" + self.phone_number[-9:]
+            return self.phone_number
+
         return self.phone_number
 
     def get_applied_course(self):

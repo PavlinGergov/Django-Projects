@@ -136,10 +136,22 @@ class InterviewSlotAdmin(admin.ModelAdmin):
         return obj.teacher_time_slot.teacher
     get_teacher.short_description = "Teacher"
 
+    def get_student_confirmation(self, obj):
+        return obj.student.has_confirmed_interview
+    get_student_confirmation.short_description = "Confirmed interview"
+    get_student_confirmation.boolean = True
+
+    def get_student_has_been_interviewed(self, obj):
+        return obj.student.has_been_interviewed
+    get_student_has_been_interviewed.short_description = "Has been interviewed"
+    get_student_has_been_interviewed.boolean = True
+
     list_display = [
         'get_date',
         'get_start_time',
         'get_student',
+        'get_student_confirmation',
+        'get_student_has_been_interviewed',
         'get_teacher',
     ]
 

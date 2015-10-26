@@ -22,6 +22,7 @@ class GetStudentsEmails(GetStudents):
             email = email.split(" ")[1][13:-1].replace("&#64;", "@").replace(",", ".")
         except:
             pass
+        email = email.replace(",", ".")
         return email
 
     def generate_students_emails(self):
