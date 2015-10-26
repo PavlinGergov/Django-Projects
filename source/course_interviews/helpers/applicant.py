@@ -19,7 +19,11 @@ class Applicant:
         return self.name
 
     def get_email(self):
-        return self.email.split(" ")[1][13:-1].replace("&#64;", "@")
+        try:
+            self.email = self.email.split(" ")[1][13:-1].replace("&#64;", "@")
+        except:
+            pass
+        return self.email
 
     def get_skype(self):
         if self.skype.startswith("<a href"):
