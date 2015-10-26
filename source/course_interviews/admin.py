@@ -123,7 +123,7 @@ class InterviewSlotAdmin(admin.ModelAdmin):
     def get_start_time(self, obj):
         return obj.start_time
     get_start_time.short_description = "Starting"
-    get_start_time.admin_order_field = 'start_time'
+    get_start_time.admin_order_field = "start_time"
 
     def get_student(self, obj):
         if obj.student_id and obj.student.name:
@@ -154,5 +154,6 @@ class InterviewSlotAdmin(admin.ModelAdmin):
         'get_student_has_been_interviewed',
         'get_teacher',
     ]
+    ordering = ['teacher_time_slot__date', 'start_time']
 
 admin.site.register(InterviewSlot, InterviewSlotAdmin)
