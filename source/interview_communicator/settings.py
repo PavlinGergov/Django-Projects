@@ -24,7 +24,19 @@ INSTALLED_APPS = (
     'course_interviews'
 )
 
+# Post_Office settings:
+EMAIL_USE_TLS = True
+EMAIL_HOST = ''
+EMAIL_PORT = 123
+EMAIL_HOST_USER = 'hackbulgaria@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_BACKEND = 'post_office.EmailBackend'
+POST_OFFICE = {
+    'LOG_LEVEL': 2  # logs everything (both successful and failed delivery attempts)
+}
+
+# End of Post_Office settings
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
