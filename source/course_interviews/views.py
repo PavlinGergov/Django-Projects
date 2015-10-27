@@ -1,7 +1,9 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from .helpers.course_students import CourseStudents
 from .helpers.get_students_emails import GetStudentsEmails
+from .models import Student, InterviewSlot
+from datetime import datetime
 
 
 def index(request):
@@ -45,3 +47,61 @@ def get_emails(request):
     json = get_students_emails_generator.get_json()
 
     return JsonResponse(json)
+
+
+def confirm_interview(request, token):
+    student = get_object_or_404(Student, uuid=token)
+    if student.has_confirmed_interview:
+        return HttpResponseNotFound('<h1>You\'ve already confirmed your interview!</h1>')
+    student.has_confirmed_interview = True
+    student.save()
+
+    return render(request, "confirm_interview.html", locals())
+
+
+def choose_interview(request, token):
+    student = get_object_or_404(Student, uuid=token)
+    # If student has interview_date, he should't see the page
+    if student.has_interview_date:
+        return HttpResponseNotFound('<h1>You already have an interview!</h1>')
+
+    # Bufer slots are provided specially for the
+    # students that don't like their initial interview date
+    # bufer_slots = slots = InterviewSlot.objects.filter(???)  # use proper filter
+    bufer_slots = []  # This variable is for testing purpose only!
+    # The other slots are the ones that do not have student assigned to them
+    other_slots = InterviewSlot.objects.all().order_by('teacher_time_slot__date')
+
+    if len(bufer_slots) != 0:
+        available_slots = [slot for slot
+                           in bufer_slots
+                           if not slot.student]
+    # If no bufers are left, use available empty slots
+    else:
+        present = datetime.now()
+        available_slots = [slot for slot
+                           in other_slots
+                           if not slot.student
+                           and slot.teacher_time_slot.date > datetime.date(present)]
+
+    return render(request, "choose_interview.html", locals())
+
+
+def confirm_slot(request):
+    slot_id = request.POST["slot_id"]
+    student_uuid = request.POST["student_uuid"]
+
+    slot = get_object_or_404(InterviewSlot, id=slot_id)
+    student = get_object_or_404(Student, uuid=student_uuid)
+
+    if slot.student or student.has_interview_date:
+        return HttpResponseNotFound(
+            "The interview is already taken or the student already has interview date")
+
+    slot.student = student
+    student.has_interview_date = True
+
+    slot.save()
+    student.save()
+
+    return HttpResponse("OK")

@@ -1,0 +1,55 @@
+<h1>TODO: Крависа табличка със слотовете</h1>
+Красив токен: {{ token }}
+<div class="row">
+  <div class="container-fluid">
+
+    <div class="col-md-8 col-md-offset-2">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Starting time</th>
+            <th>Slot_id + token = new interview date</th>
+          </tr>
+        </thead>
+        <tbody>
+      {% for slot in available_slots %}
+          <tr>
+            <td>{{ slot.teacher_time_slot.date }}</td>
+            <td>{{ slot.start_time }}</td>
+            <td><button data-slotid="{{ slot.id }}" class="btn btn-primary choose-interview" action="{% url 'course_interviews:index' %}">Select Interview</button></td>
+          </tr>
+      {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('.choose-interview').click(function(e){
+      var slotId = $(this).data('slotid')
+      $.ajax({  
+        type: "POST",
+        url: "/confirm-slot/",
+        data: {
+          'slot_id': slotId,
+          'student_uuid': '{{ token }}', 
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(data) {
+          var token = '{{token}}'
+          $(location).attr("href", "{% url 'course_interviews:confirm_interview' token %} ")
+        },
+        error: function(data){
+          console.log(data);
+        }
+      });
+    });
+  });
+</script>

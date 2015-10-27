@@ -3,6 +3,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
 from django_extensions.db.fields import UUIDField
+from ckeditor.fields import RichTextField
 import uuid
 
 
@@ -77,3 +78,14 @@ class InterviewSlot(models.Model):
     teacher_time_slot = models.ForeignKey(InterviewerFreeTime)
     student = models.ForeignKey(Student, null=True)
     start_time = models.TimeField(blank=False, null=True)
+
+
+class EmailMessage(models.Model):
+    email_about = models.CharField(
+        max_length=50,
+        default="",
+        help_text='What\'s the email about?')
+    message = RichTextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.email_about

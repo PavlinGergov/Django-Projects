@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Student, Teacher, InterviewerFreeTime, InterviewSlot
+from .models import Student, Teacher, InterviewerFreeTime, InterviewSlot, EmailMessage
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -85,6 +85,7 @@ class InterviewerFreeTimeAdmin(admin.ModelAdmin):
     ]
     list_filter = ["date", "start_time", "end_time"]
     search_fields = ["teacher"]
+    ordering = ['date', 'start_time']
 
 admin.site.register(InterviewerFreeTime, InterviewerFreeTimeAdmin)
 
@@ -137,12 +138,16 @@ class InterviewSlotAdmin(admin.ModelAdmin):
     get_teacher.short_description = "Teacher"
 
     def get_student_confirmation(self, obj):
-        return obj.student.has_confirmed_interview
+        if obj.student_id:
+            return obj.student.has_confirmed_interview
+        return
     get_student_confirmation.short_description = "Confirmed interview"
     get_student_confirmation.boolean = True
 
     def get_student_has_been_interviewed(self, obj):
-        return obj.student.has_been_interviewed
+        if obj.student_id:
+            return obj.student.has_been_interviewed
+        return
     get_student_has_been_interviewed.short_description = "Has been interviewed"
     get_student_has_been_interviewed.boolean = True
 
@@ -157,3 +162,9 @@ class InterviewSlotAdmin(admin.ModelAdmin):
     ordering = ['teacher_time_slot__date', 'start_time']
 
 admin.site.register(InterviewSlot, InterviewSlotAdmin)
+
+
+class EmailMessageAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(EmailMessage, EmailMessageAdmin)
