@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-
-from .models import Student, Teacher, InterviewerFreeTime, InterviewSlot, EmailMessage
+from .models import Student, Teacher, InterviewerFreeTime, InterviewSlot
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -162,9 +161,3 @@ class InterviewSlotAdmin(admin.ModelAdmin):
     ordering = ['teacher_time_slot__date', 'start_time']
 
 admin.site.register(InterviewSlot, InterviewSlotAdmin)
-
-
-class EmailMessageAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(EmailMessage, EmailMessageAdmin)

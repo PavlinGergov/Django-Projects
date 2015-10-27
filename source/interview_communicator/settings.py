@@ -19,9 +19,12 @@ INSTALLED_APPS = (
 
     'django_extensions',
     'ckeditor',
+    'post_office',
 
     'course_interviews'
 )
+
+EMAIL_BACKEND = 'post_office.EmailBackend'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -91,6 +94,7 @@ SUIT_CONFIG = {
     'MENU_EXCLUDE': ('auth.group',),
     'MENU': (
         {'app': 'course_interviews', 'icon': 'icon-pencil'},
+        {'app': 'post_office', 'icon': 'icon-envelope'},
     ),
 
     # misc
