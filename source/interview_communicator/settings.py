@@ -113,6 +113,8 @@ SUIT_CONFIG = {
     'LIST_PER_PAGE': 100
 }
 
+AUTH_USER_MODEL = 'course_interviews.Teacher'
+
 try:
     from .local_settings import *
 except ImportError:

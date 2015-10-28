@@ -1,10 +1,34 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-from django.contrib.auth.models import User
 from django_extensions.db.fields import UUIDField
-from ckeditor.fields import RichTextField
+from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 import uuid
+
+
+class SiteUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        today = timezone.now()
+
+        if not email:
+            raise ValueError('The given email address must be set')
+
+        email = SiteUserManager.normalize_email(email)
+        user = self.model(email=email,
+                          is_staff=False, is_active=True, **extra_fields)
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        u = self.create_user(email, password, **extra_fields)
+        u.is_staff = True
+        u.is_active = True
+        u.is_superuser = True
+        u.save(using=self._db)
+        return u
 
 
 class Student(models.Model):
@@ -51,15 +75,30 @@ class Student(models.Model):
         return self.name
 
 
-class Teacher(models.Model):
-    user = models.OneToOneField(User)
+class Teacher(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True, blank=False)
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['skype']
+
+    objects = SiteUserManager()
     skype = models.CharField(
         default=None,
         max_length=50,
         help_text='Enter the skype of the teacher!')
 
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email
+
     def __str__(self):
-        return self.user.get_full_name()
+        return self.get_full_name()
 
 
 class InterviewerFreeTime(models.Model):
