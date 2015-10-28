@@ -13,7 +13,6 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
 lib/
 lib64/
 parts/
@@ -37,11 +36,9 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-.coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*,cover
 
 # Translations
 *.mo
@@ -49,11 +46,21 @@ coverage.xml
 
 # Django stuff:
 *.log
-*.sqlite3
 
 # Sphinx documentation
 docs/_build/
 
 # PyBuilder
 target/
+
+*.idea
+*.iml
+
+db.sqlite3
 local_settings.py
+/static/
+media/
+bower_components
+.sass-cache/
+*.map
+*.swp
