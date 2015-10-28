@@ -19,6 +19,7 @@
   "dependencies": {
     "jquery": "~2.1.4",
     "bootstrap": "~3.3.5",
-    "handlebars": "~4.0.3"
+    "handlebars": "~4.0.3",
+    "font-awesome": "fontawesome#~4.4.0"
   }
 }
