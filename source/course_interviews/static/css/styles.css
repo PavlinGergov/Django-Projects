@@ -1,0 +1,46 @@
+html {
+    height: 100%;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background: #F2F2F2;
+    height: 100%;
+}
+
+body #page-wrap {
+    min-height: 100%;
+    margin-bottom: -100px;
+}
+
+body #page-wrap #header nav {
+    height: 80px;
+    background: black;
+}
+
+body #page-wrap #header img {
+    height: 50px;
+    padding-left: 30px;
+}
+
+body #footer {
+    height: 100px;
+    background: #F7931E;
+    color: white;
+    text-align: center;
+}
+
+body #footer #socials {
+    padding: 10px 0 10px 0;
+}
+
+body #footer #socials a {
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+}
+
+body .confirm-text-container h1 {
+    text-align: center;
+}

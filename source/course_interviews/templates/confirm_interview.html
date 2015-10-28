@@ -1,17 +1,18 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
-    <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-    <title>HackBulgaria Interviews</title>
-  </head>
-  <body>
-    <div class="row">
-      <div class="container-fluid">
-        <h1>Congratulations, {{ student.name }}, you just confirmed your interview for the {{ student.applied_course }} course. Your interview is scheduled for {{ student.interviewslot.teacher_time_slot.date }} at {{ student.interviewslot.start_time }}</h1>
-      </div>
-    </div>
-  </body>
-</html>
+
+{% block 'page-content' %}
+{% autoescape off %}
+<div class="container">
+  <div class="iamge-container">
+    <img style="display:block;
+    margin:auto;" alt="Brand" src="{% static 'images/competition.gif' %}">
+  </div>
+  <div class="confirm-text-container">
+    <h1>Your interview is confirmed!</h1>
+    <h3>Your tech interview for the {{ student.applied_course }} course is scheduled for {{ student.interviewslot.teacher_time_slot.date }} at {{ student.interviewslot.start_time }}</h3>
+    <h3>If you are unable to attend your interview, please contact us at hackbulgaria@gmail.com </h3>
+  </div>
+</div>
+{% endautoescape %}
+{% endblock %}

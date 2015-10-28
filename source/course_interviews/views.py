@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
+from django.http import JsonResponse, HttpResponse, HttpResponseNotFound, Http404
 from .models import Student, InterviewSlot
 from .helpers.course_students import CourseStudents
 from .helpers.get_students_emails import GetStudentsEmails
@@ -67,10 +67,10 @@ def confirm_interview(request, token):
     student = get_object_or_404(Student, uuid=token)
 
     if student.has_confirmed_interview:
-        return render(request, "already_confirmed_interview.html", locals())
+        return render(request, "confirm_interview.html", locals())
 
     elif not student.has_interview_date:
-        return HttpResponseNotFound('<h1>You do not have an interview date!</h1>')
+        raise Http404("Student does not an interview date")
 
     student.has_confirmed_interview = True
     student.save()
@@ -80,9 +80,8 @@ def confirm_interview(request, token):
 def choose_interview(request, token):
     student = get_object_or_404(Student, uuid=token)
 
-    # If student has interview_date, he should't see the page
-    if student.has_interview_date:
-        return HttpResponseNotFound('<h1>You already have an interview!</h1>')
+    if student.has_confirmed_interview:
+        raise Http404("Student already has an interview date")
 
     available_slots = get_free_interview_slots()
 
@@ -97,7 +96,7 @@ def confirm_slot(request):
     student = get_object_or_404(Student, uuid=student_uuid)
 
     if slot.student:
-        return HttpResponseNotFound("The interview is already taken!")
+        return HttpResponseNotFound("The interview slot is already taken!")
 
     # Make sure the auto generated slot the student already has is gona be free
     try:
