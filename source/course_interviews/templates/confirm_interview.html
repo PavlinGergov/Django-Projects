@@ -1,4 +1,17 @@
-<h1>Congratulations, Panda, you just confirmed your interview.</h1>
-<h1>Be prepared and embrace yourself!</h1>
-
-TODO: Add data
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <title>HackBulgaria Interviews</title>
+  </head>
+  <body>
+    <div class="row">
+      <div class="container-fluid">
+        <h1>Congratulations, {{ student.name }}, you just confirmed your interview for the {{ student.applied_course }} course. Your interview is scheduled for {{ student.interviewslot.teacher_time_slot.date }} at {{ student.interviewslot.start_time }}</h1>
+      </div>
+    </div>
+  </body>
+</html>
