@@ -9,10 +9,12 @@ class Command(BaseCommand):
     def handle(self, **options):
 
         recipients = [student for student in Student.objects.filter(has_received_email=False)]
+        template = 'interview_confirmation'
+
         for student in recipients:
             mail.send(
                 recipients=[student.email],
-                template='interview_confirmation',  # Add template
+                template=template,
                 context={
                     'name': student.name,
                     'applied_course': student.applied_course,
