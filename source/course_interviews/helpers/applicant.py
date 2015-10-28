@@ -34,6 +34,7 @@ class Applicant:
         return self.skype
 
     def get_phone_number(self):
+        self.phone_number = self.phone_number.replace(" ", "").replace("-", "")
         if self.phone_number.startswith('+359'):
             return self.phone_number
         else:
