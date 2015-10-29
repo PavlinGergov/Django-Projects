@@ -1,7 +1,7 @@
-from .get_students import GetStudents
+from .get_students import AbstractGetStudents
 
 
-class CourseStudents(GetStudents):
+class CourseStudents(AbstractGetStudents):
 
     def __init__(self, address, form_name, api_key, count, page, course):
         super().__init__(address, form_name, api_key, count, page)

@@ -4,7 +4,7 @@ from post_office import mail
 
 
 class Command(BaseCommand):
-    help = 'Generate emails for interview_date confirmation'
+    help = 'Generate emails for interview date confirmation'
 
     def handle(self, **options):
 

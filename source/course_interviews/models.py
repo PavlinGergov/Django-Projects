@@ -2,15 +2,13 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django_extensions.db.fields import UUIDField
-from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 import uuid
 
 
 class SiteUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        today = timezone.now()
 
+    def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The given email address must be set')
 
@@ -76,26 +74,28 @@ class Student(models.Model):
 
 
 class Teacher(AbstractBaseUser, PermissionsMixin):
+    objects = SiteUserManager()
+
     email = models.EmailField(unique=True, blank=False)
+    skype = models.CharField(
+        default=None,
+        max_length=50,
+        help_text='Enter the skype of the teacher!')
+    first_name = models.CharField(default="", max_length=50)
+    last_name = models.CharField(default="", max_length=50)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['skype']
-
-    objects = SiteUserManager()
-    skype = models.CharField(
-        default=None,
-        max_length=50,
-        help_text='Enter the skype of the teacher!')
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'skype']
 
     def get_full_name(self):
-        return self.email
+        return self.first_name + " " + self.last_name
 
     def get_short_name(self):
-        return self.email
+        return self.first_name
 
     def __str__(self):
         return self.get_full_name()

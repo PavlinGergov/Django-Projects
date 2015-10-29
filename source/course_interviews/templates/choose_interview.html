@@ -7,18 +7,20 @@
     <div class="container-fluid">
 
       <div class="col-md-8 col-md-offset-2">
-        <table id="interview-slots-table" class="table table-hover">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Starting time</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
+        <div class="table-responsive">
+          <table id="interview-slots-table" class="table table-hover">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Starting time</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
 
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
 
       </div>
 
@@ -54,7 +56,7 @@
         <h4 class="modal-title">Confirm the selected interview slot</h4>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to select this interview slot? If you confirm it, you won't be able to select another one.</p>
+        <p>Are you sure you want to select this interview slot? If you confirm it, you will <b>NOT</b> be able to select another one.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default confirm-chosen-interview" data-dismiss="modal">Confirm</button>
@@ -75,7 +77,6 @@
     </tr>
   {% endverbatim %}
 </script>
-
 
 {% endblock %}
 {% block 'scripts' %}

@@ -1,7 +1,7 @@
 import requests
 
 
-class GetStudents:
+class AbstractGetStudents:
 
     def __init__(self, address, form_name, api_key, count, page):
         self.address = address

@@ -74,6 +74,7 @@ def confirm_interview(request, token):
 
     student.has_confirmed_interview = True
     student.save()
+
     return render(request, "confirm_interview.html", locals())
 
 

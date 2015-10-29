@@ -26,7 +26,7 @@ function drawTable(data){
 
 function refreshInterviews(){
     $.ajax({
-        url: "http://localhost:8000/api/get-interview-slots/",
+        url: "/api/get-interview-slots/",
         type: 'GET',
         success: function(res) {
             drawTable(res)

@@ -3,7 +3,7 @@ from course_interviews.helpers.generate_students import GenerateStudents
 
 
 class Command(BaseCommand):
-    help = 'Make a request to f6s and add applicants with finalized forms'
+    help = 'Generate students(applicants) with finalized forms by making a request to f6s'
 
     def handle(self, **options):
         f6s_address = "https://api.f6s.com/"

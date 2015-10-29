@@ -14,7 +14,9 @@
 
   <body>
   <div id="page-wrap">
+
     <div id="header">
+
       <nav class="navbar navbar-default">
         <div class="navbar-header">
           <a id="logo" class="navbar-brand" href="https://hackbulgaria.com/">
@@ -22,34 +24,40 @@
           </a>
         </div>
       </nav>
+
     </div>
+
+    <div id="content">
     {% block 'page-content' %}
 
     {% endblock %}
-  </div>
-
-  <footer id="footer">
-    <div id="socials">
-      <a href="https://github.com/HackBulgaria/" target="_blank">
-        <i class="fa fa-github fa-3x"></i>
-      </a>
-
-      <a href="https://www.facebook.com/HackBulgaria" target="_blank">
-        <i class="fa fa-facebook-square fa-3x"></i>
-      </a>
-
-      <a href="https://www.youtube.com/user/HackBulgaria/feed" target="_blank">
-        <i class="fa fa-youtube-play fa-3x"></i>
-      </a>
-
-      <a href="https://twitter.com/hackbulgaria" target="_blank">
-        <i class="fa fa-twitter fa-3x"></i>
-      </a>
     </div>
 
-    HackBulgaria. All rights reserved.
+    <div id="footer">
 
-  </footer>
+      <div id="socials">
+        <a href="https://github.com/HackBulgaria/" target="_blank">
+          <i class="fa fa-github fa-3x"></i>
+        </a>
+
+        <a href="https://www.facebook.com/HackBulgaria" target="_blank">
+          <i class="fa fa-facebook-square fa-3x"></i>
+        </a>
+
+        <a href="https://www.youtube.com/user/HackBulgaria/feed" target="_blank">
+          <i class="fa fa-youtube-play fa-3x"></i>
+        </a>
+
+        <a href="https://twitter.com/hackbulgaria" target="_blank">
+          <i class="fa fa-twitter fa-3x"></i>
+        </a>
+      </div>
+
+      HackBulgaria. All rights reserved.
+    </div>
+
+  </div>
+  
   </body>
   <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>

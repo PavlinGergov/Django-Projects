@@ -1,9 +1,9 @@
 from course_interviews.models import Student
-from .get_students import GetStudents
+from .get_students import AbstractGetStudents
 from .applicant import Applicant
 
 
-class GenerateStudents(GetStudents):
+class GenerateStudents(AbstractGetStudents):
 
     def __init__(self, address, form_name, api_key, count, page):
         super().__init__(address, form_name, api_key, count, page)
@@ -47,7 +47,6 @@ class GenerateStudents(GetStudents):
                 student.save()
             except Exception:
                 self.__inc_errors()
-                # TODO: handle?
                 pass
 
     def generate_students(self):

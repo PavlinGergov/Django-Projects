@@ -11,7 +11,7 @@ body {
 
 body #page-wrap {
     min-height: 100%;
-    margin-bottom: -100px;
+    position: relative;
 }
 
 body #page-wrap #header nav {
@@ -20,15 +20,26 @@ body #page-wrap #header nav {
 }
 
 body #page-wrap #header img {
-    height: 50px;
-    padding-left: 30px;
+    max-height: 50px;
+    max-width: 100%;
+    float: left;
+    padding-left: 10px;
+}
+
+body #content {
+    padding-bottom: 100px;
 }
 
 body #footer {
-    height: 100px;
     background: #F7931E;
     color: white;
     text-align: center;
+
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 body #footer #socials {
@@ -41,6 +52,19 @@ body #footer #socials a {
     color: white;
 }
 
+body .image-container img {
+    display:block;
+    margin:auto;
+}
+
 body .confirm-text-container h1 {
+    text-align: center;
+}
+
+.modal-title {
+    text-align: center;
+}
+
+.modal-body {
     text-align: center;
 }

@@ -1,1 +1,10 @@
-<h1> Obicham Pandi </h1>
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block 'page-content' %}
+{% autoescape off %}
+<div class="container">
+  <h1> Interview Communicator </h1>
+</div>
+{% endautoescape %}
+{% endblock %}

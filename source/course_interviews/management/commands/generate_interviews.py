@@ -3,7 +3,7 @@ from course_interviews.helpers.generate_interviews import GenerateInterviews
 
 
 class Command(BaseCommand):
-    help = 'Generate interviews using the free interview slots'
+    help = 'Generate interviews using the free slots and the students without interviews'
 
     def handle(self, **options):
         interview_generator = GenerateInterviews()

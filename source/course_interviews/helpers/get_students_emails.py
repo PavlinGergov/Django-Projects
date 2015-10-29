@@ -1,7 +1,8 @@
-from .get_students import GetStudents
+from .get_students import AbstractGetStudents
 
 
-class GetStudentsEmails(GetStudents):
+# This class is helper for the api/get-emails view
+class GetStudentsEmails(AbstractGetStudents):
 
     def __init__(self, address, form_name, api_key, count, page, courses):
         super().__init__(address, form_name, api_key, count, page)
@@ -14,7 +15,6 @@ class GetStudentsEmails(GetStudents):
     def __generate_courses_for_json(self):
         for course in self.courses:
             self.__json[course] = []
-        print(self.__json)
 
     def __get_validated_email(self, email):
         try:
