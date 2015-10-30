@@ -45,8 +45,9 @@ class GenerateStudents(AbstractGetStudents):
             try:
                 self.__inc_students_with_finalized_applications()
                 student.save()
-            except Exception:
+            except Exception as e:
                 self.__inc_errors()
+                print(e)
                 pass
 
     def generate_students(self):
