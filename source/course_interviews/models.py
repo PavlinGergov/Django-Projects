@@ -32,14 +32,14 @@ class SiteUserManager(BaseUserManager):
 class Student(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-    skype = models.CharField(default=None, max_length=110)
+    skype = models.CharField(default=None, max_length=1100)
     phone_number = PhoneNumberField(blank=True)
-    applied_course = models.CharField(null=True, blank=True, max_length=110)
+    applied_course = models.CharField(null=True, blank=True, max_length=1100)
     first_task = models.URLField(null=True, blank=True)
     second_task = models.URLField(null=True, blank=True)
     third_task = models.URLField(null=True, blank=True)
-    studies_at = models.CharField(blank=True, null=True, max_length=110)
-    works_at = models.CharField(null=True, blank=True, max_length=110)
+    studies_at = models.CharField(blank=True, null=True, max_length=1100)
+    works_at = models.CharField(null=True, blank=True, max_length=1100)
 
     # possible_rating is number between 1 and 10 to be selected in the integer field
     possible_ratings = [(i, i) for i in range(11)]
