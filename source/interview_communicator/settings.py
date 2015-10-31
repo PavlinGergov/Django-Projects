@@ -25,12 +25,20 @@ INSTALLED_APPS = (
 )
 
 # Post_Office settings:
-EMAIL_USE_TLS = True
-EMAIL_HOST = ''
-EMAIL_PORT = 123
-EMAIL_HOST_USER = 'hackbulgaria@gmail.com'
-EMAIL_HOST_PASSWORD = ''
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp-pulse.com'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = 'ivaylo@hackbulgaria.com'
+EMAIL_HOST_PASSWORD = '76anmbCKrDWEYW'
+DEFAULT_FROM_EMAIL = 'register@hackbulgaria.com'
+
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = ''
+# EMAIL_PORT = 123
+# EMAIL_HOST_USER = 'hackbulgaria@gmail.com'
+# EMAIL_HOST_PASSWORD = ''
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 EMAIL_BACKEND = 'post_office.EmailBackend'
 POST_OFFICE = {
     'LOG_LEVEL': 2  # logs everything (both successful and failed delivery attempts)
