@@ -65,6 +65,7 @@ class AdminPanelTests(TestCase):
         response = client.get(url, follow=True)
         result_list = response.context_data['cl'].result_list
         change_list = self.teacher_user1.interviewerfreetime_set.all()
+
         self.assertCountEqual(change_list, result_list)
 
     def test_interviewer_free_time_admin_save_model_on_create(self):
@@ -104,6 +105,7 @@ class AdminPanelTests(TestCase):
             "student": self.student1
         }
         response = client.post(url, data, follow=True)
+
         self.assertEqual(response.status_code, 403)
 
     def test_interview_slot_admin_queryset_for_teacher_user(self):
@@ -119,4 +121,5 @@ class AdminPanelTests(TestCase):
         response = client.get(url, follow=True)
         result_list = response.context_data['cl'].result_list
         change_list = InterviewSlot.objects.all().filter(teacher_time_slot=self.teacher_free_time1)
+
         self.assertCountEqual(change_list, result_list)
