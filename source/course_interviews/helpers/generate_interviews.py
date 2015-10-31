@@ -17,7 +17,7 @@ class GenerateInterviews:
         students = list(Student.objects.all())
         slots = InterviewSlot.objects.all()
         for slot in slots:
-            if len(students) != 0:
+            while len(students) != 0:
                 student = students.pop(0)
                 if not student.has_interview_date:
                     self.__inc_generated_interviews()
@@ -25,8 +25,8 @@ class GenerateInterviews:
                     student.has_interview_date = True
                     slot.save()
                     student.save()
-            else:
-                break
+                    break
+
         self.__set_students_without_interviews(students)
 
     def get_students_without_interviews(self):
