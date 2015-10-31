@@ -10,6 +10,7 @@ def index(request):
     return render(request, "index.html", locals())
 
 
+# Function providing the students that applied for a specific course and submited their applications
 def get_students(request, course):
     if course == "Csharp":
         course = "Programming 101 with C#"
@@ -31,6 +32,8 @@ def get_students(request, course):
     return JsonResponse(json)
 
 
+# Function for the emails of all applicants that left email in their F6S application,
+# but did not yet submit their tasks - we are gona send them a reminder email for submition
 def get_emails(request):
     courses = ["Programming 101 with C#", "Programming 101 with Java"]
 
@@ -49,6 +52,7 @@ def get_emails(request):
     return JsonResponse(json)
 
 
+# Function serving the interview slots to HandleBars
 def get_interview_slots(request):
     json = []
     available_slots = get_free_interview_slots()
@@ -66,10 +70,7 @@ def get_interview_slots(request):
 def confirm_interview(request, token):
     student = get_object_or_404(Student, uuid=token)
 
-    if student.has_confirmed_interview:
-        return render(request, "confirm_interview.html", locals())
-
-    elif not student.has_interview_date:
+    if not student.has_interview_date:
         raise Http404("Student does not an interview date")
 
     student.has_confirmed_interview = True
@@ -99,10 +100,9 @@ def confirm_slot(request):
     if slot.student:
         return HttpResponseNotFound("The interview slot is already taken!")
 
-    # Make sure the auto generated slot the student already has is gona be free
+    # The auto generated slot the student already has should become free
     try:
-        vacate_slot = InterviewSlot.objects.filter(student=student)
-        vacate_slot = vacate_slot[0]
+        vacate_slot = InterviewSlot.objects.get(student=student)
         vacate_slot.student = None
         vacate_slot.save()
     except:

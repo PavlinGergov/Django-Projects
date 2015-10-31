@@ -4,12 +4,12 @@ from datetime import datetime
 
 def get_free_interview_slots():
     # Buffer slots are provided specially for the
-    # students that don't like their initial interview date
+    # students that can not attend their initial interview date
 
     # buffer_slots = InterviewSlot.objects.filter(???)  # use proper filter
     buffer_slots = []  # This variable is for testing purpose only!
 
-    # The other slots are the ones that do not have student assigned to them
+    # The other slots are the ones that do not have students assigned to them
     other_slots = InterviewSlot.objects.all().order_by('teacher_time_slot__date')
 
     if len(buffer_slots) != 0:

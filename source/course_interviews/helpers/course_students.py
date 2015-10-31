@@ -25,6 +25,8 @@ class CourseStudents(AbstractGetStudents):
                 break
             self.page += 1
 
+            # If there is selected course and the application is
+            # Finalized, inc() the students for the specified course
             for student in applications["data"]:
                 if student["questions"][6]["field_response"] and \
                         student["questions"][6]["field_response"][0] == self.course:

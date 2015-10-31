@@ -23,11 +23,14 @@ class GenerateInterviewSlots:
         teacher_time_slots = InterviewerFreeTime.objects.all().order_by('date')
 
         for slot in teacher_time_slots:
-            # Check if slot is already generated
+            # Check if slots are already generated for that time_slot
+            # (by a previous invocation of manage.py generate_slots)
             if slot.has_generated_slots():
                 continue
 
+            # summarized free time of the interviewer
             free_time = self.__calculate_diff_in_time(slot.start_time, slot.end_time)
+            # starting time of the first interview
             interview_start_time = slot.start_time
 
             while free_time >= self.interview_time_length:

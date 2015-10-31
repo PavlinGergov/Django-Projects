@@ -29,6 +29,35 @@ class SiteUserManager(BaseUserManager):
         return u
 
 
+class Teacher(AbstractBaseUser, PermissionsMixin):
+
+    objects = SiteUserManager()
+
+    email = models.EmailField(unique=True, blank=False)
+    skype = models.CharField(
+        default=None,
+        max_length=50,
+        help_text='Enter the skype of the teacher!')
+    first_name = models.CharField(default="", max_length=50)
+    last_name = models.CharField(default="", max_length=50)
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'skype']
+
+    def get_full_name(self):
+        return self.first_name + " " + self.last_name
+
+    def get_short_name(self):
+        return self.first_name
+
+    def __str__(self):
+        return self.get_full_name()
+
+
 class Student(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -73,40 +102,14 @@ class Student(models.Model):
         return self.name
 
 
-class Teacher(AbstractBaseUser, PermissionsMixin):
-    objects = SiteUserManager()
-
-    email = models.EmailField(unique=True, blank=False)
-    skype = models.CharField(
-        default=None,
-        max_length=50,
-        help_text='Enter the skype of the teacher!')
-    first_name = models.CharField(default="", max_length=50)
-    last_name = models.CharField(default="", max_length=50)
-
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'skype']
-
-    def get_full_name(self):
-        return self.first_name + " " + self.last_name
-
-    def get_short_name(self):
-        return self.first_name
-
-    def __str__(self):
-        return self.get_full_name()
-
-
 class InterviewerFreeTime(models.Model):
     teacher = models.ForeignKey(Teacher)
     date = models.DateField(blank=False, null=True)
     start_time = models.TimeField(blank=False, null=True)
     end_time = models.TimeField(blank=False, null=True)
 
+    # method for checking if the slots for the specific interviewer free time
+    # are already generated. Method is called by /helpers/generate_interview_slots.py
     def has_generated_slots(self):
         return self.interviewslot_set.exists()
 

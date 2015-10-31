@@ -47,6 +47,10 @@ class GenerateStudents(AbstractGetStudents):
                 student.save()
             except Exception as e:
                 self.__inc_errors()
+                # the regular exception when saving student (that is already in the base) in the
+                # base is email already taken - this error should be seen when
+                # manage.py generate_students is invoked more than once
+                # Error is not handled because of the different DB types
                 print(e)
                 pass
 

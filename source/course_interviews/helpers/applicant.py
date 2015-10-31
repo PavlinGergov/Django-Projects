@@ -19,21 +19,22 @@ class Applicant:
         return self.name
 
     def get_email(self):
-        # Example for email returned from F6S:
+        # Example email returned from F6S:
         # "<a href=\"mailto:barcabg95&#64;abv.bg\" target=\"_blank\"
         # class=\"parsed-link\" rel=\"nofollow\">barcabg95&#64;abv.bg<\/a>"
         try:
             self.email = self.email.split(" ")[1][13:-1].replace("&#64;", "@")
         except:
             pass
-        # F6S does not validate anything, so a wrong email comes as a string. Example:
+        # F6S does not validate anything, so a wrong email comes as a string
+        # Example:
         # "alexandermladjov@abv,bg"
         self.email = self.email.replace(",", ".")
 
         return self.email
 
     def get_skype(self):
-        # If an email is passed instead of skype name
+        # If an email is passed instead of skype name (hot fix)
         if self.skype.startswith("<a href"):
             return self.skype.split(" ")[1][13:-1].replace("&#64;", "@")
 
@@ -53,7 +54,7 @@ class Applicant:
         return self.applied_course
 
 
-# Example for task returned from F6S:
+# Example task returned from F6S:
 # "<a href=\"https:\/\/github.com\/VladislavAtanasov\/HackBulgariaJavaCourseApplication\/blob\/
 # master\/Task1\/Points.java\" target=\"_blank\" class=\"parsed-link\"rel=\"nofollow\">github.com\/
 # VladislavAtanasov\/HackBulgariaJavaCourseApplication\/blob\/master\/Task1\/Points.java<\/a>"
