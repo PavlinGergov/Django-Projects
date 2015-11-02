@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Generate interview slots using the free time of the teachers(interviewers)'
 
     def handle(self, **options):
-        interview_length = 30
+        interview_length = 20
         break_between_interviews = 10
 
         interview_slots_generator = GenerateInterviewSlots(
