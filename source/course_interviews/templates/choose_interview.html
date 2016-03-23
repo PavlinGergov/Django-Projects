@@ -6,7 +6,8 @@
   <div class="row">
     <div class="container-fluid">
 
-      <div class="col-md-8 col-md-offset-2">
+      <div class="choose-interview-container col-md-8 col-md-offset-2">
+        <h2>Choose your interview date and hour</h2>
         <div class="table-responsive">
           <table id="interview-slots-table" class="table table-hover">
             <thead>
@@ -35,8 +36,11 @@
 
     <div class="modal-content">
       <div class="modal-body">
-        <h4>This interview slot has already been selected.</h4>
-        <h4>Please choose another one.</h4>
+        <h4>
+          <span id="errors">
+            
+          </span>
+        </h4>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -87,23 +91,24 @@
 
       $.ajax({
         type: "POST",
-        url: "/confirm-slot/",
+        url: "{% url 'course_interviews:confirm_slot' %}",
         data: {
-            'slot_id': window.slotId,
-            'student_uuid': '{{ token }}', 
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          'slot_id': window.slotId,
+          'student_uuid': '{{ token }}', 
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
 
         success: function(data) {
-            var token = '{{token}}'
-            $(location).attr("href", "{% url 'course_interviews:confirm_interview' token %} ")
+          var token = '{{token}}'
+          $(location).attr("href", "{% url 'course_interviews:confirm_interview' token %} ")
         },
 
         error: function(data){
-            $('#interview-taken').modal('show');
-            $('#interview-taken').on('hidden.bs.modal', function () {
-                location.reload();
-            })
+          $('#errors').text(data.responseText)
+          $('#interview-taken').modal('show');
+          $('#interview-taken').on('hidden.bs.modal', function () {
+              location.reload();
+          })
         }
 
       });

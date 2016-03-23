@@ -1,8 +1,8 @@
 from course_interviews.models import Student, Teacher, InterviewerFreeTime, InterviewSlot
-
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from datetime import date, timedelta
 
 
 class ViewsTests(TestCase):
@@ -46,15 +46,17 @@ class ViewsTests(TestCase):
         self.teacher_user2.groups.add(self.teacher_group)
         self.teacher_user2.save()
 
+        self.tomorrow = date.today() + timedelta(days=1)
+
         self.teacher_free_time1 = InterviewerFreeTime.objects.create(
             teacher=self.teacher_user1,
-            date="2016-10-30",
+            date=str(self.tomorrow),
             start_time="15:00",
             end_time="16:00")
 
         self.teacher_free_time2 = InterviewerFreeTime.objects.create(
             teacher=self.teacher_user2,
-            date="2016-10-31",
+            date=str(self.tomorrow),
             start_time="16:00",
             end_time="17:00")
 
@@ -81,27 +83,6 @@ class ViewsTests(TestCase):
         response = self.client.get(url, follow=True)
 
         self.assertEqual(response.status_code, 200)
-
-    def test_confirm_interview_without_interview_date(self):
-        """
-        Student without interview date should not be able to acces confirm_interview page
-        """
-        url = reverse('course_interviews:confirm_interview', args=(self.student1.uuid, ))
-        response = self.client.get(url, follow=True)
-
-        self.assertEqual(response.status_code, 404)
-
-    def test_has_confirmed_interview_date_after_confirming_interview(self):
-        """
-        After confirming the interview, the student should have has_confirmed_interview = True
-        """
-        self.student1.has_interview_date = True
-        self.student1.save()
-        url = reverse('course_interviews:confirm_interview', args=(self.student1.uuid, ))
-        response = self.client.get(url, follow=True)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Student.objects.get(id=self.student1.id).has_confirmed_interview, True)
 
     def test_choose_interview_for_student_with_confirmed_interview(self):
         """

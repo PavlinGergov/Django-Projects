@@ -93,6 +93,7 @@ class Student(models.Model):
         help_text='Коментар на интервюиращия за цялостното представяне на кандидата')
     has_interview_date = models.BooleanField(default=False)
     has_received_email = models.BooleanField(default=False)
+    has_received_new_courses_email = models.BooleanField(default=False)
     has_confirmed_interview = models.BooleanField(default=False)
     has_been_interviewed = models.BooleanField(default=False)
     is_accepted = models.BooleanField(default=False)
@@ -107,6 +108,7 @@ class InterviewerFreeTime(models.Model):
     date = models.DateField(blank=False, null=True)
     start_time = models.TimeField(blank=False, null=True)
     end_time = models.TimeField(blank=False, null=True)
+    buffer_time = models.BooleanField(default=False)
 
     # method for checking if the slots for the specific interviewer free time
     # are already generated. Method is called by /helpers/generate_interview_slots.py
@@ -119,5 +121,6 @@ class InterviewerFreeTime(models.Model):
 
 class InterviewSlot(models.Model):
     teacher_time_slot = models.ForeignKey(InterviewerFreeTime)
-    student = models.OneToOneField(Student, null=True)
+    student = models.OneToOneField(Student, null=True, blank=True)
     start_time = models.TimeField(blank=False, null=True)
+    buffer_slot = models.BooleanField(default=False)

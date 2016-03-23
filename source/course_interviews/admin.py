@@ -1,7 +1,13 @@
+from .helpers.generate_interview_slots import GenerateInterviewSlots
+from .helpers.generate_interviews import GenerateInterviews
+from .helpers.generate_emails import GenerateConfirmEmails
+from interview_communicator.local_settings import confirm_interview_url, choose_interview_url
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.conf.urls import patterns, url
 from .models import Student, Teacher, InterviewerFreeTime, InterviewSlot
 
 
@@ -130,10 +136,15 @@ admin.site.register(Student, StudentAdmin)
 class InterviewerFreeTimeAdmin(admin.ModelAdmin):
     model = InterviewerFreeTime
 
+    def has_change_permission(self, request, obj=None):
+        if obj and request.POST and not request.user.is_superuser and obj.has_generated_slots():
+            return False
+        return super().has_change_permission(request, obj)
+
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []
         if not request.user.is_superuser:
-            self.exclude = ['teacher']
+            self.exclude = ['teacher', 'buffer_time']
         return super().get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
@@ -147,11 +158,17 @@ class InterviewerFreeTimeAdmin(admin.ModelAdmin):
             return queryset
         return queryset.filter(teacher=request.user)
 
+    def get_generated_slots(self, obj):
+        return obj.has_generated_slots()
+    get_generated_slots.short_description = "Has generated slots"
+    get_generated_slots.boolean = True
+
     list_display = [
         "teacher",
         "date",
         "start_time",
-        "end_time"
+        "end_time",
+        'get_generated_slots'
     ]
     list_filter = ["date", "start_time", "end_time"]
     search_fields = ["teacher"]
@@ -161,6 +178,89 @@ admin.site.register(InterviewerFreeTime, InterviewerFreeTimeAdmin)
 
 
 class InterviewSlotAdmin(admin.ModelAdmin):
+
+    # Generate interview slots using the free time of the teachers(interviewers)
+
+    def generate_slots(self, request):
+        if request.user.is_superuser:
+            interview_length = 20
+            break_between_interviews = 10
+
+            interview_slots_generator = GenerateInterviewSlots(
+                interview_length, break_between_interviews)
+
+            interview_slots_generator.generate_interview_slots()
+            generated_slots = interview_slots_generator.get_generated_slots()
+
+            self.message_user(
+                request, "%s slots were generated"
+                % generated_slots)
+
+            return HttpResponseRedirect(request.META["HTTP_REFERER"])
+        else:
+            return HttpResponseForbidden()
+
+    # Generate interviews using the free slots and the students without interviews
+    def generate_interviews(self, request):
+        if request.user.is_superuser:
+            interview_generator = GenerateInterviews()
+            interview_generator.generate_interviews()
+
+            generated_interviews = interview_generator.get_generated_interviews_count()
+            students_without_interviews = interview_generator.get_students_without_interviews()
+
+            self.message_user(
+                request, "%s interviews were generated"
+                % generated_interviews)
+            self.message_user(
+                request, "%s students do not have interview date"
+                % students_without_interviews)
+
+            return HttpResponseRedirect(request.META["HTTP_REFERER"])
+        else:
+            return HttpResponseForbidden()
+
+    # Generate emails for interview date confirmation
+    def generate_emails(self, request):
+        if request.user.is_superuser:
+            # Generate emails for the new courses
+            # template = 'new_courses'
+            # email_generator = GenerateNewCoursesEmails(template)
+            # email_generator.generate_new_courses_emails()
+
+            template = 'interview_confirmation'
+
+            email_generator = GenerateConfirmEmails(
+                template, confirm_interview_url, choose_interview_url)
+
+            email_generator.generate_confirmation_emails()
+
+            generated_emails = email_generator.get_generated_emails()
+            students_with_emails = email_generator.get_students_with_generated_emails()
+            students_without_emails = email_generator.get_students_without_generated_emails()
+
+            self.message_user(
+                request, "%s  confirmational emails were generated"
+                % generated_emails)
+            self.message_user(
+                request, "There are %s students with generated confirmational emails"
+                % students_with_emails)
+            self.message_user(
+                request, "%s students still do NOT have confirmational emails"
+                % students_without_emails)
+            return HttpResponseRedirect(request.META["HTTP_REFERER"])
+        else:
+            return HttpResponseForbidden()
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = patterns(
+            "",
+            url(r"^generate_slots/$", self.generate_slots, name="generate_slots"),
+            url(r"^generate_interviews/$", self.generate_interviews, name="generate_interviews"),
+            url(r"^generate_emails/$", self.generate_emails, name="generate_emails")
+        )
+        return my_urls + urls
 
     def has_change_permission(self, request, obj=None):
         if obj and request.POST and not request.user.is_superuser:
@@ -209,13 +309,67 @@ class InterviewSlotAdmin(admin.ModelAdmin):
     get_student_has_been_interviewed.short_description = "Has been interviewed"
     get_student_has_been_interviewed.boolean = True
 
+    def get_teacher_skype(self, obj):
+        return obj.teacher_time_slot.teacher.skype
+    get_teacher_skype.short_description = "Teacher Skype"
+
+    def get_student_skype(self, obj):
+        if obj.student_id:
+            return obj.student.skype
+        return
+    get_student_skype.short_description = "Student Skype"
+
+    def get_student_email(self, obj):
+        if obj.student_id:
+            return obj.student.email
+        return
+    get_student_email.short_description = "Student Email"
+
+    def get_student_course(self, obj):
+        if obj.student_id:
+            return obj.student.applied_course
+        return
+    get_student_course.short_description = "Applying for"
+
+    def get_is_student_accepted(self, obj):
+        if obj.student_id:
+            return obj.student.is_accepted
+        return
+    get_is_student_accepted.short_description = "Is accepted"
+    get_is_student_accepted.boolean = True
+
+    def get_student_code_skills(self, obj):
+        if obj.student_id:
+            return obj.student.code_skills_rating
+        return
+    get_student_code_skills.short_description = "Code skills"
+
+    def get_student_code_design_rating(self, obj):
+        if obj.student_id:
+            return obj.student.code_design_rating
+        return
+    get_student_code_design_rating.short_description = "Design skills"
+
+    def get_student_fit_attitude_rating(self, obj):
+        if obj.student_id:
+            return obj.student.fit_attitude_rating
+        return
+    get_student_fit_attitude_rating.short_description = "Fit rating"
+
     list_display = [
         'get_date',
         'get_start_time',
         'get_student',
+        'get_student_skype',
+        'get_teacher',
+        'get_teacher_skype',
+        'get_student_course',
         'get_student_confirmation',
         'get_student_has_been_interviewed',
-        'get_teacher',
+        'get_student_code_skills',
+        'get_student_code_design_rating',
+        'get_student_fit_attitude_rating',
+        'get_is_student_accepted',
     ]
     ordering = ['teacher_time_slot__date', 'start_time']
 
